@@ -25,7 +25,7 @@ if WordPos(Type, 'VIO PM') = 0 | FileName = '' then
 
 if Stream(FileName, 'C', 'Query Exist') == '' then
   do
-    Say 'File "'FileName'" does not exist!'
+    Say 'FATAL: File "'FileName'" does not exist.'
     Return 1
   end
 
@@ -35,10 +35,12 @@ if ExeName = '' then
     ExeName = FileSpec('drive', FileName)||FileSpec('path', FileName)||Fname||'.exe'
   end
 
-rc_exe = SysSearchPath('PATH', 'RC.EXE')
+rc_exe = SysSearchPath('PATH', 'RC16.EXE')
+if rc_exe = '' then
+  rc_exe = SysSearchPath('PATH', 'RC.EXE')
 if rc_exe = '' then
   do
-    Say 'Resource compiler RC.EXE is not found in PATH!'
+    Say 'FATAL: Resource compiler RC16.EXE or RC.EXE is not found in PATH.'
     Return 1
   end
 
@@ -48,7 +50,7 @@ Parse Source operatingSystem commandType sourceFileName
 rexx_exe = FileSpec('drive', sourceFileName) || FileSpec('path', sourceFileName) || rexx_exe
 if Stream(rexx_exe, 'C', 'Query Exist') == '' then
   do
-    Say 'File "'rexx_exe'" is required, but does not exist!'
+    Say 'FATAL: File "'rexx_exe'" is required, but does not exist.'
     Return 1
   end
 
