@@ -9,7 +9,8 @@ FileName = Translate(FileName, '\', '/')
 ExeName = Translate(ExeName, '\', '/')
 
 IsLauncher = Left(Type, 1) = '@'
-Type = Substr(Type, 2)
+if IsLauncher then
+  Type = Substr(Type, 2)
 
 if WordPos(Type, 'VIO PM') = 0 | FileName = '' then
   do
