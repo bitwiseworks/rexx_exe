@@ -1,0 +1,72 @@
+user documentation            REXX_EXE                    Veit Kannegieser
+ננננננננננננננננננננננננננננננננננננננננננננננננננננננננננננננננננננננננננ
+
+This package has two programs to wrap a rexx program in either a VIO
+(commandline) or PM (presentation manager) executable. You probably know
+some other rexx -> exe converters like VXRexx, Vispro, REXX2EXE,...
+Features of this implementation:
+
+ - build from assembler source: small size - comes close or is below
+   the size of the wrapped rexx, less processing overhead and memory usage
+
+ - turns the rexx scripts into plain executable resources - no need to
+   compress the resources since the OS build in page compression can be
+   used. Use LxLite to squeeze the last byte from the executable..
+   I also see no need to encrypt a rexx script. Since there is nothing
+   'compiled' or tokenized, the rexx program should be portable between
+   different OS/2 rexx interpreter versions and lines.
+
+
+Usage:
+
+  rexx2pm.cmd   <sourcefile> [<exefile>]
+  rexx2vio.cmd  <sourcefile> [<exefile>]
+
+    <sourcefile>  is the rexx source. It does not need but is recommended
+                  to begin with a /* comment.
+
+    <exefile>     target file name. if not specified the name is derived
+                  from <sourcefile> less extension plus .EXE.
+
+  Both rexx scripts take the wrapper executable code from rexx_pm.exe or
+  rexx_vio.exe respectivly.
+
+
+Requirements:
+
+  installed resource compiler (RC.EXE)
+
+
+Notes:
+
+  The Parse Arg .. function may return one blank when called without
+  arguments. This is different than seen from CMD rexx. REXX_EXE will not
+  alter the commandline. Use the = and not the == compare operation when
+  checking for missing/empty parameters.
+
+  The only error message exptected to see from rexx_pm.exe and rexx_vio.exe
+  is 'Failed to get Resource!', which means that it failed to load the rexx
+  source resource (type ID 17746, name ID 1). The only thinkable cause
+  could be that the resource is missing (resmgr -d rexx_vio.exe *.*).
+  Both wrapper files already have a example rexx script bound, that is
+  replaced with your code.
+  
+  You can (but should not) pass a tokenized tokenized image to rexx_vio/rexx_pm,
+  a sample is included (test_src/test_tok).
+
+Changes
+  ‏ 2006.04.10
+  
+  - Address() returns 'CMD' now. Better have sources working than 
+    having a way to detect REXX_VIO/REXX_PM.
+    
+  - added Dos32Free calls for the tokenized image.
+    we could also put the tokenized image into the executable
+    (just another resource) in later versions, would make it
+    the file larger but faster.
+
+    
+Ideas for improvement
+  
+  If *.ico exist for <sourcefile> or <exefile>, then place the icon into the executable
+  as resource and as extendend attribute.
