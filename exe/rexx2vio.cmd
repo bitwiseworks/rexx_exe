@@ -22,9 +22,9 @@ if Stream(FileName, 'C', 'Query Exist') == '' then
     Return 1
   end
 
+Parse Value FileSpec('name', FileName) With Fname '.' Fext
 if ExeName = '' then
   do
-    Parse Value FileSpec('name', FileName) With Fname '.' Fext
     ExeName = FileSpec('drive', FileName)||FileSpec('path', FileName)||Fname||'.exe'
   end
 
@@ -40,9 +40,8 @@ if Stream(rexx_exe, 'C', 'Query Exist') == '' then
       end
   end
 
-
 '@copy' rexx_exe ExeName
-'@echo RESOURCE 17746 1' FileName ' > %tmp%\'rexx2exe'.rc'
-'@rc.exe -n -x2 %tmp%\'rexx2exe'.rc' ExeName
-'@del %tmp%\'rexx2exe'.rc %tmp%\'rexx2exe'.res'
+'@echo RESOURCE 17746 1' FileName ' > %tmp%\'Fname'.rc'
+'@rc.exe -n -x2 %tmp%\'Fname'.rc' ExeName
+'@del %tmp%\'Fname'.rc %tmp%\'Fname'.res'
 Return 0
