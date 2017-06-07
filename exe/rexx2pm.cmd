@@ -12,7 +12,7 @@ ExeName = TRANSLATE( ExeName, '\', '/')
 
 if FileName = '' then
   do
-    Say 'Usage: '+Translate(rexx2exe)+' <sourcefile> [<exefile>]'
+    Say 'Usage: 'Translate(rexx2exe)' <sourcefile> [<exefile>]'
     Return 1
   end
 
