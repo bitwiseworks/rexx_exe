@@ -52,8 +52,25 @@ if Stream(rexx_exe, 'C', 'Query Exist') == '' then
     Return 1
   end
 
-'@copy' rexx_exe ExeName
-'@echo RESOURCE 17746 1' FileName ' > %tmp%\'Fname'.rc'
-'@'rc_exe' -n -x2 %tmp%\'Fname'.rc' ExeName
-'@del %tmp%\'Fname'.rc %tmp%\'Fname'.res'
+'@copy' rexx_exe ExeName '1>nul 2>&1'
+if rc \= 0 then
+  do
+    Say 'FATAL: Copying "'rexx_exe'" to "'ExeName'" failed with error code' rc'.'
+    return rc
+  end
+'@echo RESOURCE 17746 1' FileName ' > 'ExeName'.rc'
+if rc \= 0 then
+  do
+    Say 'FATAL: Creating file "'ExeName'.rc" failed with error code' rc'.'
+    '@del ' ExeName
+    return rc
+  end
+'@'rc_exe' -n -x2 'ExeName'.rc' ExeName
+if rc \= 0 then
+  do
+    Say 'FATAL:' rc_exe 'failed with error code' rc'.'
+    '@del' ExeName ExeName'.rc 'ExeName'.res'
+    return rc
+  end
+'@del 'ExeName'.rc 'ExeName'.res'
 Return 0
