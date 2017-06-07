@@ -3,7 +3,12 @@
 rexx2exe = 'rexx2vio'     /* own name */
 rexx_exe = 'rexx_vio.exe' /* loader   */
 
+call RxFuncAdd 'SysSearchPath', 'RexxUtil', 'SysSearchPath'
+
 Parse Arg FileName ExeName
+
+FileName = TRANSLATE( FileName, '\', '/')
+ExeName = TRANSLATE( ExeName, '\', '/')
 
 if FileName = '' then
   do
@@ -27,8 +32,12 @@ Parse Source operatingSystem commandType sourceFileName
 rexx_exe = FileSpec('drive', sourceFileName) || FileSpec('path', sourceFileName) || rexx_exe
 if Stream(rexx_exe, 'C', 'Query Exist') == '' then
   do
-    Say 'File "'rexx_exe'" is required, but does not exist!'
-    Return 1
+    rexx_exe = SysSearchPath('PATH', rexx_exe)
+    if Stream(rexx_exe, 'C', 'Query Exist') == '' then
+      do
+        Say 'File "'rexx_exe'" is required, but does not exist!'
+        Return 1
+      end
   end
 
 
