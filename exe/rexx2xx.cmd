@@ -41,7 +41,7 @@ if rc_exe = '' then
   rc_exe = SysSearchPath('PATH', 'RC.EXE')
 if rc_exe = '' then
   do
-    Say 'FATAL: Resource compiler RC16.EXE or RC.EXE is not found in PATH.'
+    Say 'FATAL: Neither resource compiler RC16.EXE nor RC.EXE is found in PATH.'
     Return 1
   end
 
